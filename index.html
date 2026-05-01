@@ -163,6 +163,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 /* Separador de exportação */
 .exp-sep{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;margin-top:12px;padding-top:10px;border-top:.5px solid var(--bd)}
 .exp-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+
+/* AMORTIZAÇÃO */
+.am-hero{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.am-kpi{border-radius:var(--rl);padding:14px;text-align:center;border:.5px solid var(--bd)}
+.am-kpi.bl{background:var(--bll);border-color:#b5d4f4}
+.am-kpi.gr{background:var(--grl);border-color:var(--grb)}
+.am-kpi.rd{background:var(--rdl);border-color:var(--rdb)}
+.am-kpi.am{background:var(--aml);border-color:var(--amb)}
+.am-kpi .v{font-size:16px;font-weight:800;line-height:1.1}
+.am-kpi.bl .v{color:var(--bl2)}.am-kpi.gr .v{color:var(--gr)}.am-kpi.rd .v{color:var(--rd)}.am-kpi.am .v{color:var(--am)}
+.am-kpi .l{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.3px;margin-top:4px}
+.am-kpi .sub{font-size:10px;color:var(--tx2);margin-top:3px}
+.am-bar-wrap{margin:10px 0}
+.am-bar-label{display:flex;justify-content:space-between;font-size:9px;color:var(--tx3);margin-bottom:3px}
+.am-bar{height:14px;border-radius:7px;overflow:hidden;background:var(--bg);display:flex;border:.5px solid var(--bd)}
+.am-seg{height:100%;transition:width .4s}
+.am-prazo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.am-prazo-item{border-radius:var(--r);padding:10px;text-align:center;border:.5px solid var(--bd);cursor:pointer;transition:all .15s}
+.am-prazo-item:hover{border-color:var(--bl2)}
+.am-prazo-item.ativo{background:var(--bll);border-color:var(--bl2)}
+.am-prazo-item .pv{font-size:12px;font-weight:700;color:var(--bl2)}
+.am-prazo-item .pl{font-size:8px;color:var(--tx3);text-transform:uppercase;margin-top:2px}
+.am-prazo-item .pe{font-size:10px;color:var(--gr);font-weight:600;margin-top:2px}
+.am-slider-wrap{margin:10px 0}
+.am-slider-wrap label{font-size:10px;color:var(--tx2);font-weight:700;text-transform:uppercase;letter-spacing:.3px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.am-slider-wrap label span{font-size:13px;font-weight:700;color:var(--bl2)}
+input[type=range].am-sl{width:100%;accent-color:var(--bl2);cursor:pointer}
+.am-evolucao{width:100%;border-collapse:collapse;font-size:11px}
+.am-evolucao th{background:var(--bll);color:var(--bl2);padding:5px 8px;font-size:9px;text-transform:uppercase;letter-spacing:.3px}
+.am-evolucao td{padding:5px 8px;border-bottom:.5px solid var(--bd);color:var(--tx2)}
+.am-evolucao tr:last-child td{border-bottom:none}
+.am-alerta-alug{background:linear-gradient(135deg,var(--rdl),#fff8f8);border:.5px solid var(--rdb);border-radius:var(--rl);padding:14px 16px;margin:10px 0}
+.am-alerta-alug .ttl{font-size:12px;font-weight:700;color:var(--rd);margin-bottom:6px}
+.am-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:8px}
+.am-vs-box{border-radius:var(--r);padding:10px;text-align:center}
+.am-vs-box.ruim{background:var(--rdl);border:.5px solid var(--rdb)}
+.am-vs-box.bom{background:var(--grl);border:.5px solid var(--grb)}
+.am-vs-box .v{font-size:13px;font-weight:800}
+.am-vs-box.ruim .v{color:var(--rd)}.am-vs-box.bom .v{color:var(--gr)}
+.am-vs-box .l{font-size:9px;color:var(--tx3);text-transform:uppercase;margin-top:2px}
+.am-vs-sep{text-align:center;font-size:10px;font-weight:700;color:var(--tx3)}
 </style>
 </head>
 <body>
@@ -190,6 +231,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="tab" onclick="ST('resultado')">Simulação</button>
   <button class="tab" onclick="ST('prosoluto')">Pro Soluto</button>
   <button class="tab" onclick="ST('direta')">Tab. Direta</button>
+  <button class="tab" onclick="ST('amort')">Amortização</button>
 </div>
 
 <!-- ══ DADOS ══ -->
@@ -250,7 +292,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="f ff"><label>Redutor de taxa</label><div class="chk"><input type="checkbox" id="red"/><span>Sim — servidor / correspondente bancário</span></div></div>
   <div class="f ff"><label>Dependente menor 18 anos</label><div class="chk"><input type="checkbox" id="dep"/><span>Sim — família tem dependente</span></div></div>
   <div class="f ff"><label>Possui imóvel no nome?</label><div class="chk"><input type="checkbox" id="pim"/><span>Sim — pode impedir MCMV</span></div></div>
-  <div class="f ff"><label>Financiamento ativo?</label><div class="chk"><input type="checkbox" id="fat"/><span>Sim — financiamento ativo</span></div></div>
+  <div class="f ff"><label>Financiamento ativo?</label><div class="chk"><input type="checkbox" id="fat" onchange="toggleFat()"/><span>Sim — financiamento ativo</span></div></div>
+  <div id="fat-detalhes" style="display:none;grid-column:1/-1">
+    <div class="fg" style="margin-bottom:0">
+      <div class="f">
+        <label>Tipo do financiamento ativo</label>
+        <select id="fat-tipo">
+          <option value="outros">Outros — carro, pessoal, consórcio</option>
+          <option value="imobiliario">Imobiliário — casa ou apartamento</option>
+        </select>
+        <div class="hi">Imobiliário impede MCMV + reduz parcela disponível</div>
+      </div>
+      <div class="f">
+        <label>Parcela mensal do financiamento</label>
+        <input type="text" id="fat-parc" placeholder="800 · 1200" oninput="hi('fat-parc','fatp-h')"/>
+        <div class="hi" id="fatp-h">Valor que sai todo mês — reduz teto de 30%</div>
+      </div>
+    </div>
+  </div>
 </div>
 <button class="btn-p" onclick="simular()">Gerar Simulação ↗</button>
 </div>
@@ -375,6 +434,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 </div>
 
+<!-- ══ AMORTIZAÇÃO ══ -->
+<div id="tab-amort" class="sec">
+  <div id="amort-wrap">
+    <div class="empty">Gere uma simulação na aba Dados para ver a análise de amortização.</div>
+  </div>
+
+  <!-- CALCULADORA STANDALONE -->
+  <div class="card" style="margin-top:12px">
+    <div class="ct">📐 Calculadora livre — simule qualquer cenário</div>
+    <div class="fg">
+      <div class="f">
+        <label>Valor financiado (R$)</label>
+        <input type="text" id="am-pv" placeholder="280mil · 280000" oninput="hi('am-pv','am-pvh')"/>
+        <div class="hi" id="am-pvh"></div>
+      </div>
+      <div class="f">
+        <label>Taxa (% a.a.)</label>
+        <input type="number" id="am-taxa" placeholder="8.47" step="0.01" min="1" max="20" value="8.47"/>
+      </div>
+      <div class="f">
+        <label>Prazo (anos)</label>
+        <input type="number" id="am-prazo" placeholder="30" min="1" max="35" value="30"/>
+      </div>
+      <div class="f">
+        <label>Aluguel atual (R$)</label>
+        <input type="text" id="am-alug" placeholder="1800" value="0" oninput="hi('am-alug','am-alh')"/>
+        <div class="hi" id="am-alh">Para o comparativo comprar vs alugar</div>
+      </div>
+    </div>
+    <button class="btn-p" onclick="calcAmortStandalone()">Calcular ↗</button>
+  </div>
+  <div id="amort-calc-result"></div>
+</div>
+
 </div><!-- /app -->
 <script>
 // ════ UTILS ════════════════════════════════════
@@ -399,6 +492,12 @@ function hi(iId,hId){
 const Rn=v=>Math.round(v||0);
 const fR=v=>Rn(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
 const fP=v=>(isNaN(v)?0:+v).toFixed(1)+'%';
+
+// ════ FINANCIAMENTO ATIVO ══════════════════════
+function toggleFat(){
+  const checked=document.getElementById('fat').checked;
+  document.getElementById('fat-detalhes').style.display=checked?'block':'none';
+}
 
 // ════ PRAZO ════════════════════════════════════
 let _prazo=35;
@@ -429,6 +528,8 @@ const TB=[
 const bL=r=>TB.find(x=>r>=x.mn&&r<=x.mx)||TB[TB.length-1];
 // PRICE exato
 const cP=(pv,ta,m)=>{const i=ta/100/12;if(!i||!m||!pv)return 0;return pv*(i*Math.pow(1+i,m))/(Math.pow(1+i,m)-1)};
+// PV máximo dado parcela, taxa e prazo (PRICE inversa)
+const cPVmax=(pmt,ta,m)=>{const i=ta/100/12;if(!i||!m||!pmt)return pmt*m;return pmt*(Math.pow(1+i,m)-1)/(i*Math.pow(1+i,m))};
 // SAC: amortização fixa, juros decrescentes
 // 1ª parcela = amort + juros sobre saldo cheio
 const cSAC=(pv,ta,m)=>{
@@ -452,40 +553,92 @@ function simular(){
   const dep=document.getElementById('dep').checked;
   const pim=document.getElementById('pim').checked;
   const fat=document.getElementById('fat').checked;
+  const fatTipo=fat?document.getElementById('fat-tipo').value:'';
+  const fatParc=fat?pV(document.getElementById('fat-parc').value):0;
   const perf=document.getElementById('perf').value;
   if(!renda||!vi||!idade){alert('Preencha: Renda, Valor do imóvel e Idade.');return}
   if(idade<18||idade>79){alert('Idade: 18–79 anos.');return}
-  const prazoF=calcPrazo(idade);const meses=prazoF*12;
+
+  const prazoF=calcPrazo(idade);
+  const meses=prazoF*12;
   const va=vaIn>0?vaIn:vi;
-  const ln=bL(renda);const taxa=red?ln.tcr:ln.tsr;
-  const f80=va*0.8;const fTab=red?ln.fcr:ln.fsr;
-  const parcelaMaxTabela=red?(ln.fsr>ln.fcr?ln.tsr:ln.tcr):ln.tsr; // parcela da tabela APROVE
-  // O financiamento é limitado pela TABELA (renda) e por 80% da avaliação
-  let finB=Math.min(fTab,f80);
+
+  // ── DETECTAR SBPE
+  // Gatilhos: possui imóvel no nome OU financiamento imobiliário ativo
+  // Renda > 12.000 OU imóvel > 500.000 já caem em SBPE pela tabela — tratados normalmente
+  const isSBPE=pim||(fat&&fatTipo==='imobiliario');
+
+  let taxa, f80, fTab, limRenda, ln, parcelaTabela, finPorPrazo, parcDisponivelFat, finPorRendaFat;
+
+  if(isSBPE){
+    // SBPE: taxa fixa 11.49%, comprometimento 25% da renda, sem redutor
+    taxa=11.49;
+    f80=va*0.80;                          // PRICE: 80% avaliação
+    limRenda=renda*0.25;                  // 25% da renda (SBPE)
+    ln={fx:'SBPE',pg:'SBPE',tsr:11.49,tcr:11.49,fsr:600000,fcr:600000,scd:0,ssd:0,av:750000,mn:0,mx:999999};
+    // Financiável pela renda (25% - parcela fat se houver)
+    parcDisponivelFat=Math.max(0,limRenda-fatParc);
+    finPorRendaFat=cPVmax(parcDisponivelFat,taxa,meses);
+    // Financiável pela tabela: usa o PV máximo pela renda disponível
+    fTab=Math.min(finPorRendaFat,f80,600000);
+    parcelaTabela=cP(fTab,taxa,360);
+    finPorPrazo=cPVmax(parcelaTabela,taxa,meses);
+  } else {
+    // MCMV normal
+    ln=bL(renda);
+    taxa=red?ln.tcr:ln.tsr;
+    f80=va*0.8;
+    fTab=red?ln.fcr:ln.fsr;
+    limRenda=renda*0.30;
+    parcelaTabela=cP(fTab,taxa,360);
+    finPorPrazo=cPVmax(parcelaTabela,taxa,meses);
+    parcDisponivelFat=Math.max(0,limRenda-fatParc);
+    finPorRendaFat=cPVmax(parcDisponivelFat,taxa,meses);
+  }
+
+  // ── FINANCIAMENTO REAL = MENOR ENTRE TODOS OS LIMITADORES
+  let finB=Math.min(fTab,f80,finPorPrazo,finPorRendaFat);
   if(finB+fgts>vi) finB=vi-fgts;
   const finR=Math.max(0,Math.min(finB,f80,vi));
+
+  // ── QUAL LIMITADOR ESTÁ ATIVO
+  const limAtivo={
+    prazo: prazoF<35&&finPorPrazo<fTab,
+    fat: fat&&fatParc>0&&finPorRendaFat<Math.min(fTab,finPorPrazo),
+    avaliacao: f80<fTab&&finR<=f80+200,
+    tabela: finR>=fTab-200
+  };
+
+  // Subsídio: nunca no SBPE
   let sub=0;
-  if(renda<=4000){const sb=dep?ln.scd:ln.ssd;sub=sb>=1500?sb:0}
+  if(!isSBPE&&renda<=4000){const sb=dep?ln.scd:ln.ssd;sub=sb>=1500?sb:0}
+
   const entT=Math.max(0,vi-finR-fgts);
   const ps=Math.max(0,entT-ato);
   const pctPS=vi>0?(ps/vi)*100:0;
-  // PARCELAS
+
+  // ── PARCELAS
   const parP=cP(finR,taxa,meses);
   const sac=cSAC(finR,taxa,meses);
   const pc2=finR+ato+fgts;
-  // LIMITE 30% RENDA — aplica-se APENAS ao PRICE (referência de aprovação Caixa)
-  // SAC tem 1ª parcela maior por design, mas não é limitado pelo 30% — é info comparativa
-  const limRenda=renda*0.30;
+
   const priceOk=parP<=limRenda;
-  const sacOk=true; // SAC não é reprovado por 30% — a Caixa usa PRICE como referência
+  const sacOk=true;
   const cmpP=renda>0?(parP/renda*100):0;
   const cmpS1=renda>0?(sac.p1/renda*100):0;
   let stPS,bPS;
   if(pctPS<=17.5){stPS='Ideal';bPS='bgr'}
   else if(pctPS<=21){stPS='Atenção';bPS='bam'}
   else{stPS='Risco';bPS='brd'}
-  DG={nome,idade,renda,vi,va,ato,fgts,finR,f80,fTab,ps,pctPS,sub,taxa,parP,sac,pc2,entT,ln,red,dep,pim,fat,prazoF,meses,perf,pc,stPS,bPS,ajuste:finR<fTab&&Math.abs(finR-f80)<100,prazoLim:prazoF<35,limRenda,priceOk,sacOk,cmpP,cmpS1};
+
+  DG={nome,idade,renda,vi,va,ato,fgts,finR,f80,fTab,finPorPrazo,finPorRendaFat,ps,pctPS,sub,taxa,parP,sac,pc2,entT,ln,red,dep,pim,fat,fatTipo,fatParc,prazoF,meses,perf,pc,stPS,bPS,
+    ajuste:!isSBPE&&finR<fTab&&Math.abs(finR-f80)<200,
+    prazoLim:prazoF<35,
+    isSBPE,limRenda,limAtivo,priceOk,sacOk,cmpP,cmpS1,
+    parcDisponivelFat,parcelaTabela};
   rRES();initPS();
+  // Atualiza aba amortização se já foi visitada
+  if(document.getElementById('tab-amort').classList.contains('active')) renderAmortFromDG();
   document.getElementById('td-nome').value=nome;
   ST('resultado');
 }
@@ -495,28 +648,59 @@ function rRES(){
   const d=DG,vi=d.vi,fin=d.finR,ato=d.ato,fgts=d.fgts,ps=d.ps,sub=d.sub;
   const pF=vi>0?fin/vi*100:0,pE=vi>0?(ato+fgts)/vi*100:0,pP=vi>0?ps/vi*100:0;
   let imp='';
-  if(d.pim) imp+=`<div class="al alr"><span>⚠</span><span>Possui imóvel no nome — verificar requisito MCMV</span></div>`;
-  if(d.fat) imp+=`<div class="al alr"><span>⚠</span><span>Financiamento ativo — pode impedir MCMV</span></div>`;
+
+  // ── ALERTAS DE ENQUADRAMENTO
+  if(d.isSBPE){
+    if(d.pim&&d.fat&&d.fatTipo==='imobiliario'){
+      // Ambos: imóvel no nome + financiamento imobiliário ativo
+      imp+=`<div class="al ala"><span>🏦</span><span><b>Enquadrado no SBPE</b> — possui imóvel no nome e financiamento imobiliário ativo. Taxa: <b>11,49% a.a.</b> · Comprometimento: <b>25% da renda</b> · Sem subsídio. Parcela ativa de <b>${fR(d.fatParc)}/mês</b> deduzida do teto disponível.</span></div>`;
+    } else if(d.pim){
+      // Apenas imóvel no nome
+      imp+=`<div class="al ala"><span>🏦</span><span><b>Enquadrado no SBPE</b> — possui imóvel no nome. Taxa: <b>11,49% a.a.</b> · Comprometimento: <b>25% da renda</b> (${fR(d.limRenda)}/mês) · Sem subsídio · Sem redutor.</span></div>`;
+    } else if(d.fat&&d.fatTipo==='imobiliario'){
+      // Apenas financiamento imobiliário ativo
+      imp+=`<div class="al ala"><span>🏦</span><span><b>Enquadrado no SBPE</b> — financiamento imobiliário ativo. Taxa: <b>11,49% a.a.</b> · Comprometimento: <b>25% da renda</b> · Parcela ativa de <b>${fR(d.fatParc)}/mês</b> deduzida do teto (<b>${fR(d.parcDisponivelFat)}</b> disponível) · Sem subsídio.</span></div>`;
+    }
+  } else {
+    // MCMV normal — alertas existentes
+    if(d.pim) imp+=`<div class="al alr"><span>⚠</span><span>Possui imóvel no nome — verificar requisito MCMV</span></div>`;
+    if(d.fat&&d.fatTipo==='imobiliario'){
+      imp+=`<div class="al alr"><span>🚫</span><span><b>Financiamento imobiliário ativo</b> — impede enquadramento MCMV. Verificar quitação ou substituição antes da análise.</span></div>`;
+    } else if(d.fat&&d.fatParc>0){
+      const perdeu=Math.round(Math.min(d.fTab,d.finPorPrazo)-d.finPorRendaFat);
+      imp+=`<div class="al ala"><span>⚠</span><span>Financiamento ativo de <b>${fR(d.fatParc)}/mês</b> reduz parcela disponível para <b>${fR(d.parcDisponivelFat)}</b> — impacto: <b>-${fR(Math.max(0,perdeu))}</b> no financiável.</span></div>`;
+    } else if(d.fat){
+      imp+=`<div class="al ala"><span>⚠</span><span>Financiamento ativo informado — preencha o valor da parcela para calcular o impacto real.</span></div>`;
+    }
+  }
+
+  // Alerta prazo
   const prazoH=d.prazoLim
-    ?`<div class="al ala"><span>⚠</span><span>Prazo limitado por idade: <b>${d.prazoF} anos</b> — ${d.idade}+${d.prazoF}=${d.idade+d.prazoF} anos (limite Caixa: 80a6m). Parcelas ficam mais altas.</span></div>`
+    ?`<div class="al ala"><span>⚠</span><span>Prazo limitado por idade: <b>${d.prazoF} anos</b> (${d.idade}+${d.prazoF}=${d.idade+d.prazoF} — limite Caixa 80a6m). Financiável reduzido de <b>${fR(d.fTab)}</b> para <b>${fR(Math.round(d.finPorPrazo))}</b> pelo prazo menor.</span></div>`
     :`<div class="al alb"><span>ℹ</span><span>Prazo: <b>${d.prazoF} anos</b> — ${d.idade}+${d.prazoF}=${d.idade+d.prazoF} anos calculado automaticamente</span></div>`;
   const ajH=d.ajuste?`<div class="al ala"><span>ℹ</span><span>Financiamento limitado a 80% da avaliação (${fR(d.f80)}) — tabela permitia ${fR(d.fTab)}</span></div>`:'';
   const sbH=sub>0?`<div class="al alg"><span>✓</span><span>Subsídio MCMV: <b>${fR(sub)}</b></span></div>`:'';
   const cmpOk=d.pc>0&&d.parP<=d.pc;
   const cmpH=d.pc>0?`<div class="al ${cmpOk?'alg':'ala'}"><span>${cmpOk?'✓':'⚠'}</span><span>Parcela PRICE ${fR(d.parP)} vs confortável ${fR(d.pc)}</span></div>`:'';
-  // SAC é info comparativa — sem alerta de erro (Caixa usa PRICE como referência de aprovação)
-  const sacAlert='';
-  const priceAlert=!d.priceOk?`<div class="al alr"><span>⚠</span><span>Parcela PRICE ${fR(d.parP)} (${fP(d.cmpP)} da renda) — <b>ultrapassa o limite de 30%</b>. Financiamento acima da capacidade da renda.</span></div>`:
-    `<div class="al alg"><span>✓</span><span>Parcela PRICE ${fR(d.parP)} = ${fP(d.cmpP)} da renda — dentro do limite de 30% (${fR(d.limRenda)})</span></div>`;
+
+  // Alerta comprometimento — % muda conforme SBPE (25%) ou MCMV (30%)
+  const limPct=d.isSBPE?25:30;
+  const priceAlert=!d.priceOk
+    ?`<div class="al alr"><span>⚠</span><span>Parcela PRICE ${fR(d.parP)} (${fP(d.cmpP)} da renda) — <b>ultrapassa o limite de ${limPct}%</b> ${d.isSBPE?'(SBPE)':''}. Financiamento acima da capacidade da renda.</span></div>`
+    :`<div class="al alg"><span>✓</span><span>Parcela PRICE ${fR(d.parP)} = ${fP(d.cmpP)} da renda — dentro do limite de ${limPct}% ${d.isSBPE?'(SBPE) ':''}(${fR(d.limRenda)})</span></div>`;
+
   document.getElementById('rWrap').innerHTML=`
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
     <span style="font-size:15px;font-weight:800">${d.nome}</span>
-    <span class="bdg bbl">${d.ln.fx}</span><span class="bdg bgy">${d.ln.pg}</span>
-    <span class="bdg ${d.red?'bgr':'bgy'}">${d.taxa}%a.a. ${d.red?'c/redutor':'s/redutor'}</span>
+    <span class="bdg ${d.isSBPE?'bam':'bbl'}">${d.isSBPE?'SBPE':d.ln.fx}</span>
+    <span class="bdg bgy">${d.ln.pg}</span>
+    <span class="bdg ${d.isSBPE?'bam':d.red?'bgr':'bgy'}">${d.taxa}%a.a.${d.isSBPE?' SBPE':d.red?' c/redutor':' s/redutor'}</span>
     <span class="bdg ${d.prazoLim?'bam':'bgy'}">${d.prazoF}a${d.prazoLim?' ⚠':''}</span>
     <span class="bdg ${sub>0?'bte':'bgy'}">${sub>0?'Com subsídio':'Sem subsídio'}</span>
+    ${d.isSBPE?`<span class="bdg bam">25% renda</span>`:''}
+    ${d.fat&&d.fatParc>0?`<span class="bdg brd">Fat.ativo -${fR(d.fatParc)}/m</span>`:''}
   </div>
-  ${prazoH}${imp}${ajH}${sbH}${cmpH}${priceAlert}${sacAlert}
+  ${d.isSBPE?'':`${prazoH}`}${imp}${d.isSBPE?`${prazoH}`:''}${ajH}${sbH}${cmpH}${priceAlert}
   <div class="card">
     <div class="ct">Composição do valor do imóvel</div>
     <div class="kg" style="margin-bottom:10px">
@@ -561,7 +745,7 @@ function rRES(){
         <div class="cr"><span>Economia vs PRICE</span><span style="color:var(--gr)">Menor custo total ✓</span></div>
       </div>
     </div>
-    <div class="al alb" style="margin-top:8px;margin-bottom:0"><span>ℹ</span><span>A Caixa usa a <b>parcela PRICE</b> como referência de aprovação (30% da renda). O SAC tem 1ª parcela maior por design — isso é normal e não impede aprovação.</span></div>
+    <div class="al alb" style="margin-top:8px;margin-bottom:0"><span>ℹ</span><span>A Caixa usa a <b>parcela PRICE</b> como referência de aprovação (<b>${limPct}% da renda${d.isSBPE?' — SBPE':''}</b>). O SAC tem 1ª parcela maior por design — isso é normal e não impede aprovação.</span></div>
   </div>
   <div class="card">
     <div class="ct">Status do Pro Soluto</div>
@@ -579,7 +763,8 @@ function rRES(){
     <li>Parcelas Pro Soluto corrigidas pelo INCC durante obra</li>
     <li>ITBI e registro: possível benefício na planta — confirmar empreendimento</li>
     ${sub>0?`<li>Subsídio ${fR(sub)} reduz o valor a financiar</li>`:''}
-    <li>Programa CuryMais — consultar disponibilidade</li>
+    ${d.isSBPE?`<li><b>SBPE:</b> taxa 11,49% a.a. (TR) · sem subsídio · comprometimento 25% da renda</li>`:'<li>Programa CuryMais — consultar disponibilidade</li>'}
+    <li><b>Aba Amortização</b> — veja o custo total e o poder de amortizar antecipado ↗</li>
   </ul>
   <div class="ftxt">Estimativa sujeita à análise bancária</div>
   <div class="exp-sep">Exportar simulação</div>
@@ -592,6 +777,7 @@ function rRES(){
     <button class="bpdf" onclick="gerarPDF('completo')">PDF Completo (Sim+PS) ↓</button>
   </div>`;
 }
+
 
 function resWhats(){
   const d=DG;if(!d)return;
@@ -683,12 +869,13 @@ function renderPSFechamento(ps,pctPS,stPS,aprInfo,dFech){
       <span>✅</span>
       <span><b>${aprInfo.nome}</b> · Imóvel: <b>${fR(aprInfo.vi)}</b> · Aprovado: <b>${fR(aprInfo.valApr)}</b>${aprInfo.parcApr?' · Parcela: <b>'+fR(aprInfo.parcApr)+'</b>':''} · FGTS: ${fR(aprInfo.fgts||0)}</span>
     </div>
-    <div class="psh">
+    <div id="ps-hdr-f" class="psh">
       <div class="pshk ${sC}"><div class="v">${fP(pctPS)}</div><div class="l">PS% · ${stPS}</div></div>
       <div class="pshk"><div class="v">${fR(ps)}</div><div class="l">Total PS</div></div>
-      <div class="pshk ${dC}"><div class="v" id="ps-saldo-f">${(saldo>=0?'+':'')+fR(saldo)}</div><div class="l">${saldo>=0?'Falta':'Excedente'}</div></div>
+      <div class="pshk ${dC}"><div class="v">${(saldo>=0?'+':'')+fR(saldo)}</div><div class="l">${saldo>=0?'Falta':'Excedente'}</div></div>
       <div class="pshk ${pctChv<=25?'ok':'er'}"><div class="v">${fP(pctChv)}</div><div class="l">Chave (máx25%)</div></div>
     </div>
+    <div id="ps-ato-ideal-f"></div>
     <div id="ps-alert-f" class="al ${sOk?'alg':saldo<0?'alr':'ala'}">
       <span>${sOk?'✓':saldo<0?'⚠':'ℹ'}</span>
       <span>${sOk?'Fluxo balanceado':saldo<0?'Excedente '+fR(Math.abs(saldo))+' — reduza ou redistribua':'Falta distribuir '+fR(saldo)+' — ajuste ou redistribua'}</span>
@@ -710,86 +897,54 @@ function renderPSFechamento(ps,pctPS,stPS,aprInfo,dFech){
       <button class="bg" onclick="psFechRedistr(${ps})">Redistribuir saldo ↺</button>
       <button class="bpdf" onclick="gerarPDFFech(${ps},${pctPS},'${aprInfo.nome}',${aprInfo.valApr},${aprInfo.parcApr||0})">PDF ↓</button>
     </div>`;
+  // Dispara update inicial para preencher ATO ideal
+  psFechUpd(ps);
 }
 
-function psInpFech(id,v,ps){
-  const r=PSF.find(x=>x.id===id);if(r) r._cur=parseFloat(v)||0;
-  // Se editou ATO, recalcula PS total com os dados do fechamento
-  if(id==='ato'){
-    const vi=pV(document.getElementById('fech-vi').value)||0;
-    const apr=pV(document.getElementById('fech-apr').value)||0;
-    const fgts=pV(document.getElementById('fech-fgts').value)||0;
-    const novoAto=r._cur;
-    const novoPS=Math.max(0,vi-apr-fgts-novoAto);
-    if(novoPS>0&&novoPS!==ps){
-      // Redistribui proporcionalmente
-      const eds=PSF.filter(x=>x.edit&&x.id!=='ato'&&x.id!=='pchv');
-      const somaEds=eds.reduce((s,x)=>s+x._cur*x.qtd,0);
-      if(somaEds>0) eds.forEach(x=>{
-        x._cur=Math.max(0,Math.round(x._cur*novoPS/ps));
-        const el=document.getElementById('psi-'+x.id);if(el) el.value=x._cur;
-      });
-      ps=novoPS;
-      // Atualiza badge de saldo no topo do fechamento
-      const chv=PSF.find(x=>x.id==='chv');
-      const pctChv=chv&&novoPS>0?(chv._cur/novoPS*100):0;
-      // Atualiza KPIs de cabeçalho
-      const pctPS=vi>0?(novoPS/vi)*100:0;
-      const sC=pctPS<=17.5?'ok':pctPS<=21?'wn':'er';
-    }
-  }
-  // Atualiza totais
+// Função unificada de atualização do fechamento — única fonte de verdade
+function psFechUpd(psAtual){
+  const vi=pV(document.getElementById('fech-vi').value)||0;
+  // Lê todos os valores atuais dos inputs
+  PSF.forEach(r=>{const e=document.getElementById('psi-'+r.id);if(e) r._cur=parseFloat(e.value)||r._cur||0;});
   const soma=PSF.filter(r=>r.id!=='ato'&&r.id!=='pchv').reduce((s,r)=>s+r._cur*r.qtd,0);
-  const saldo=ps-soma;const sOk=Math.abs(saldo)<=200;
-  PSF.forEach(row=>{
-    const tot=row._cur*row.qtd,pct=(row.id!=='ato'&&ps>0)?tot/ps*100:null;
-    const eT=document.getElementById('pst-'+row.id),eP=document.getElementById('psp-'+row.id);
-    if(eT) eT.textContent=fR(tot);if(eP) eP.textContent=pct!==null?fP(pct):'—';
-  });
-  const eS=document.getElementById('ps-soma-f'),eD=document.getElementById('ps-saldo-f2');
-  if(eS) eS.textContent=fR(soma);
-  const sdC=sOk?'var(--gr)':saldo<0?'var(--rd)':'var(--am)';
-  if(eD){eD.textContent=(saldo>=0?'+':'')+fR(saldo);eD.style.color=sdC}
-  psFechDisplay(ps);
-}
-
-function psFechRedistr(ps){
-  // Lê todos os valores atuais
-  PSF.forEach(r=>{const e=document.getElementById('psi-'+r.id);if(e) r._cur=parseFloat(e.value)||0});
-  // Calcula saldo apenas das linhas PS (excl ato e pchv)
-  const soma=PSF.filter(r=>r.id!=='ato'&&r.id!=='pchv').reduce((s,r)=>s+r._cur*r.qtd,0);
-  const saldo=ps-soma;
-  if(Math.abs(saldo)<1)return;
-  // Distribui proporcionalmente excluindo ato e pchv
-  const eds=PSF.filter(r=>r.edit&&r.id!=='ato'&&r.id!=='pchv');
-  const totE=eds.reduce((s,r)=>s+r._cur*r.qtd,0);
-  if(!totE)return;
-  eds.forEach(r=>{
-    r._cur=Math.max(0,r._cur+Rn(saldo*(r._cur*r.qtd/totE)/r.qtd));
-    const e=document.getElementById('psi-'+r.id);if(e) e.value=r._cur;
-  });
-  // Atualiza display sem reprocessar o ATO (chama display direto)
-  psFechDisplay(ps);
-}
-
-function psFechDisplay(ps){
-  // Atualiza todas as células de total/% e rodapé sem modificar nenhum input
-  const soma=PSF.filter(r=>r.id!=='ato'&&r.id!=='pchv').reduce((s,r)=>s+r._cur*r.qtd,0);
-  const saldo=ps-soma;
+  const saldo=psAtual-soma;
   const sOk=Math.abs(saldo)<=200;
+  const chv=PSF.find(r=>r.id==='chv');
+  const pctChv=chv&&psAtual>0?(chv._cur/psAtual*100):0;
+  // pctPS sempre sobre o VI real — igual ao psUpd do modo simulação
+  const pctPS=vi>0?(psAtual/vi)*100:0;
+  const stPS=pctPS<=17.5?'Ideal':pctPS<=21?'Atenção':'Risco';
+  const sC=pctPS<=17.5?'ok':pctPS<=21?'wn':'er';
+  const dC=sOk?'ok':saldo<0?'er':'wn';
+  const sdC=sOk?'var(--gr)':saldo<0?'var(--rd)':'var(--am)';
+
+  // Atualiza células da tabela
   PSF.forEach(row=>{
     const tot=row._cur*row.qtd;
-    const pct=(row.id!=='ato'&&ps>0)?tot/ps*100:null;
+    const pct=(row.id!=='ato'&&psAtual>0)?tot/psAtual*100:null;
     const eT=document.getElementById('pst-'+row.id);
     const eP=document.getElementById('psp-'+row.id);
     if(eT) eT.textContent=fR(tot);
     if(eP) eP.textContent=pct!==null?fP(pct):'—';
   });
+
+  // Atualiza rodapé
   const eS=document.getElementById('ps-soma-f');
   const eD=document.getElementById('ps-saldo-f2');
-  const sdC=sOk?'var(--gr)':saldo<0?'var(--rd)':'var(--am)';
   if(eS) eS.textContent=fR(soma);
-  if(eD){eD.textContent=(saldo>=0?'+':'')+fR(saldo);eD.style.color=sdC}
+  if(eD){eD.textContent=(saldo>=0?'+':'')+fR(saldo);eD.style.color=sdC;}
+
+  // Atualiza header KPIs (% e status atualizam ao vivo)
+  const hdr=document.getElementById('ps-hdr-f');
+  if(hdr){
+    hdr.innerHTML=`
+      <div class="pshk ${sC}"><div class="v">${fP(pctPS)}</div><div class="l">PS% · ${stPS}</div></div>
+      <div class="pshk"><div class="v">${fR(psAtual)}</div><div class="l">Total PS</div></div>
+      <div class="pshk ${dC}"><div class="v">${(saldo>=0?'+':'')+fR(saldo)}</div><div class="l">${saldo>=0?'Falta':'Excedente'}</div></div>
+      <div class="pshk ${pctChv<=25?'ok':'er'}"><div class="v">${fP(pctChv)}</div><div class="l">Chave (máx25%)</div></div>`;
+  }
+
+  // Atualiza alert
   const al=document.getElementById('ps-alert-f');
   if(al){
     al.className='al '+(sOk?'alg':saldo<0?'alr':'ala');
@@ -799,6 +954,64 @@ function psFechDisplay(ps){
       'Falta distribuir '+fR(saldo)+' — ajuste ou redistribua'
     }</span>`;
   }
+
+  // Dica ATO ideal
+  const atoIdeal=document.getElementById('ps-ato-ideal-f');
+  if(atoIdeal&&vi>0){
+    const apr=pV(document.getElementById('fech-apr').value)||0;
+    const fgts=pV(document.getElementById('fech-fgts').value)||0;
+    const atoNec=Math.ceil(vi-apr-fgts-(vi*0.175));
+    const atoAtual=PSF.find(r=>r.id==='ato')?._cur||0;
+    const falta=Math.max(0,atoNec-atoAtual);
+    atoIdeal.innerHTML=pctPS<=17.5
+      ?`<div class="al alg" style="margin:6px 0 0"><span>✓</span><span>PS dentro da meta ideal (≤17,5%). ATO atual suficiente.</span></div>`
+      :falta>0
+        ?`<div class="al ala" style="margin:6px 0 0"><span>💡</span><span>Para chegar em 17,5%, o ATO necessário é <b>${fR(atoNec)}</b> — faltam <b>${fR(falta)}</b>.</span></div>`
+        :`<div class="al alg" style="margin:6px 0 0"><span>✓</span><span>ATO suficiente para o ideal.</span></div>`;
+  }
+}
+
+function psInpFech(id,v,psInicial){
+  const r=PSF.find(x=>x.id===id);if(r) r._cur=parseFloat(v)||0;
+  // Se editou ATO: recalcula PS total e redistribui proporcionalmente as demais linhas
+  if(id==='ato'){
+    const vi=pV(document.getElementById('fech-vi').value)||0;
+    const apr=pV(document.getElementById('fech-apr').value)||0;
+    const fgts=pV(document.getElementById('fech-fgts').value)||0;
+    const novoAto=r._cur;
+    const novoPS=Math.max(0,vi-apr-fgts-novoAto);
+    // Redistribui linhas PS proporcionalmente ao novo total
+    if(novoPS!==psInicial&&psInicial>0){
+      const eds=PSF.filter(x=>x.edit&&x.id!=='ato'&&x.id!=='pchv');
+      const somaEds=eds.reduce((s,x)=>s+x._cur*x.qtd,0);
+      if(somaEds>0) eds.forEach(x=>{
+        x._cur=Math.max(0,Math.round(x._cur*novoPS/psInicial));
+        const el=document.getElementById('psi-'+x.id);if(el) el.value=x._cur;
+      });
+    }
+    // Atualiza o PS no header e chama update com novo PS
+    const hdrPS=document.querySelector('#ps-hdr-f .pshk:nth-child(2) .v');
+    if(hdrPS) hdrPS.textContent=fR(novoPS);
+    psFechUpd(novoPS);
+  } else {
+    // Para outras linhas, PS total não muda — passa psInicial
+    psFechUpd(psInicial);
+  }
+}
+
+function psFechRedistr(ps){
+  PSF.forEach(r=>{const e=document.getElementById('psi-'+r.id);if(e) r._cur=parseFloat(e.value)||0;});
+  const soma=PSF.filter(r=>r.id!=='ato'&&r.id!=='pchv').reduce((s,r)=>s+r._cur*r.qtd,0);
+  const saldo=ps-soma;
+  if(Math.abs(saldo)<1) return;
+  const eds=PSF.filter(r=>r.edit&&r.id!=='ato'&&r.id!=='pchv');
+  const totE=eds.reduce((s,r)=>s+r._cur*r.qtd,0);
+  if(!totE) return;
+  eds.forEach(r=>{
+    r._cur=Math.max(0,r._cur+Rn(saldo*(r._cur*r.qtd/totE)/r.qtd));
+    const e=document.getElementById('psi-'+r.id);if(e) e.value=r._cur;
+  });
+  psFechUpd(ps);
 }
 
 function psFechWhats(ps,nome,valApr,parcApr){
@@ -871,9 +1084,15 @@ function psUpd(ps){
   const sdC=sOk?'var(--gr)':saldo<0?'var(--rd)':'var(--am)';
   if(eS) eS.textContent=fR(soma);
   if(eD){eD.textContent=(saldo>=0?'+':'')+fR(saldo);eD.style.color=sdC}
+  // BUGFIX: pctPS sempre calculado a partir do DG.ps ATUAL (já atualizado pelo psInp)
+  // DG.ps é atualizado ANTES de psUpd ser chamado — então reflete o ATO novo
+  const pctPS=DG?(DG.vi>0?(DG.ps/DG.vi)*100:0):0;
+  const stPS=pctPS<=17.5?'Ideal':pctPS<=21?'Atenção':'Risco';
+  // Atualiza DG com valores recalculados para manter consistência
+  if(DG){DG.pctPS=pctPS;DG.stPS=stPS;DG.bPS=pctPS<=17.5?'bgr':pctPS<=21?'bam':'brd';}
+  // ATO ideal para chegar em 17.5%
+  const atoIdealH=psAtoIdeal(pctPS);
   const hdr=document.getElementById('ps-hdr');
-  const pctPS=DG?DG.pctPS:0;
-  const stPS=DG?DG.stPS:'—';
   if(hdr){
     const sC=pctPS<=17.5?'ok':pctPS<=21?'wn':'er',dC=sOk?'ok':saldo<0?'er':'wn';
     hdr.innerHTML=`
@@ -887,6 +1106,27 @@ function psUpd(ps){
     al.className='al '+(sOk?'alg':saldo<0?'alr':'ala');
     al.innerHTML=`<span>${sOk?'✓':saldo<0?'⚠':'ℹ'}</span><span>${sOk?'Fluxo balanceado':saldo<0?'Excedente '+fR(Math.abs(saldo))+' — reduza ou redistribua':'Falta distribuir '+fR(saldo)+' — ajuste ou redistribua'}</span>`;
   }
+  // Atualiza dica de ATO ideal
+  const atoCard=document.getElementById('ps-ato-ideal');
+  if(atoCard) atoCard.innerHTML=atoIdealH;
+}
+
+function psAtoIdeal(pctPS){
+  if(!DG) return '';
+  // ATO ideal = Imóvel - Financiamento - FGTS - (Imóvel × 17.5%)
+  const atoParaIdeal=Math.ceil(DG.vi - DG.finR - DG.fgts - (DG.vi*0.175));
+  const atoAtual=DG.ato;
+  if(pctPS<=17.5){
+    return`<div class="al alg" style="margin:8px 0 0"><span>✓</span><span>PS dentro da meta ideal (≤17,5%). ATO atual suficiente.</span></div>`;
+  }
+  if(atoParaIdeal<=0){
+    return`<div class="al alg" style="margin:8px 0 0"><span>✓</span><span>Com esse financiamento o PS ideal é atingido sem ATO adicional.</span></div>`;
+  }
+  const falta=Math.max(0,atoParaIdeal-atoAtual);
+  if(falta<=0){
+    return`<div class="al alg" style="margin:8px 0 0"><span>✓</span><span>ATO atual já é suficiente para o ideal — verifique se o financiamento foi atualizado.</span></div>`;
+  }
+  return`<div class="al ala" style="margin:8px 0 0"><span>💡</span><span>Para chegar em 17,5% (meta ideal), o ATO necessário é <b>${fR(atoParaIdeal)}</b> — faltam <b>${fR(falta)}</b> em relação ao ATO atual de ${fR(atoAtual)}.</span></div>`;
 }
 function psInp(id,v,ps){
   const r=PSF.find(x=>x.id===id);
@@ -939,6 +1179,7 @@ function renderPSFull(ps,pctPS,stPS,aprInfo){
     ${aprBanner}
     <div id="ps-hdr" class="psh"></div>
     <div id="ps-alert" class="al alg"><span>✓</span><span>Carregando...</span></div>
+    <div id="ps-ato-ideal"></div>
     <div class="card"><div class="ct">Fluxo editável — edite qualquer linha, totais e % atualizam ao vivo</div>
       <div style="overflow-x:auto"><table class="etbl" style="min-width:360px">
         <thead><tr><th>Evento</th><th style="text-align:center;width:40px">Qtd</th><th style="text-align:right;width:112px">Unit. (R$)</th><th style="text-align:right;width:84px">Total</th><th style="text-align:right;width:52px">% PS</th></tr></thead>
@@ -1179,12 +1420,261 @@ function blocoPS(d,ts){
   <table style="width:100%;border-collapse:collapse;font-size:11px"><tr style="background:#e8f0fd"><th style="padding:6px 8px;text-align:left">Evento</th><th style="padding:6px 8px;text-align:center">Qtd</th><th style="padding:6px 8px;text-align:right">Unit.</th><th style="padding:6px 8px;text-align:right">Total</th></tr>${linhas}</table>`;
 }
 
+// ════ AMORTIZAÇÃO ══════════════════════════════
+
+let _amState={modelo:'price',extraAnual:0,valorizacao:'media'};
+
+function simAmortPrice(pv,taxa,mesesOrig,extraAnual){
+  const i=taxa/100/12;const parc=cP(pv,taxa,mesesOrig);
+  let saldo=pv,totalPago=0,meses=0;
+  while(saldo>0.01&&meses<mesesOrig*2){
+    meses++;const juros=saldo*i;const amort=parc-juros;
+    if(amort<=0) break;
+    saldo=Math.max(0,saldo-amort);totalPago+=parc;
+    if(meses%12===0&&extraAnual>0&&saldo>0){const ex=Math.min(extraAnual,saldo);saldo-=ex;totalPago+=ex;}
+    if(saldo<=0) break;
+  }
+  return{meses,totalJuros:Math.max(0,totalPago-pv),totalPago};
+}
+
+function simAmortSAC(pv,taxa,mesesOrig,extraAnual){
+  const i=taxa/100/12;const amortFix=pv/mesesOrig;
+  let saldo=pv,totalPago=0,meses=0;
+  while(saldo>0.01&&meses<mesesOrig*2){
+    meses++;const juros=saldo*i;const amort=Math.min(amortFix,saldo);
+    saldo=Math.max(0,saldo-amort);totalPago+=amort+juros;
+    if(meses%12===0&&extraAnual>0&&saldo>0){const ex=Math.min(extraAnual,saldo);saldo-=ex;totalPago+=ex;}
+    if(saldo<=0) break;
+  }
+  return{meses,totalJuros:Math.max(0,totalPago-pv),totalPago};
+}
+
+function saldoMesPrice(pv,taxa,mesesTotal,mesN){
+  const i=taxa/100/12;const parc=cP(pv,taxa,mesesTotal);
+  return Math.max(0,pv*Math.pow(1+i,mesN)-parc*(Math.pow(1+i,mesN)-1)/i);
+}
+
+function renderAmort(pv,taxa,meses,aluguel,viImovel,origemDG){
+  const i=taxa/100/12;
+  const modelo=_amState.modelo;
+  const extraAnual=_amState.extraAnual;
+  const valorizacao=_amState.valorizacao;
+  const anos=meses/12;
+  const isPrice=modelo==='price';
+  const simFn=isPrice?simAmortPrice:simAmortSAC;
+
+  // ── RESUMO BASE
+  const parcPrice=cP(pv,taxa,meses);
+  const totalPrice=parcPrice*meses;
+  const jurosPrice=totalPrice-pv;
+  const p1SAC=pv/meses+pv*i;
+  const pUltSAC=pv/meses+(pv/meses)*i;
+  const jurosSAC=i*pv*(meses+1)/2;
+  const totalSAC=pv+jurosSAC;
+  const jurosBase=isPrice?jurosPrice:jurosSAC;
+  const totalBase=isPrice?totalPrice:totalSAC;
+
+  // ── CENÁRIOS AMORTIZAÇÃO
+  const extras=[0,3000,5000,8000,10000,15000,20000];
+  const cens=extras.map(ex=>{const r=simFn(pv,taxa,meses,ex);return{ex,meses:r.meses,anos:+(r.meses/12).toFixed(1),juros:r.totalJuros,total:r.totalPago,economia:jurosBase-r.totalJuros};});
+  const cAtual=simFn(pv,taxa,meses,extraAnual);
+  const cSem=cens[0];
+
+  // ── VALORIZAÇÃO IMÓVEL
+  const taxaValAnual=valorizacao==='alta'?0.08:0.05;
+  const viBase=viImovel>0?viImovel:pv;
+  const valorAposObra=viBase*1.35;
+  const anosObra=Math.min(3,anos);
+  const anosPos=Math.max(0,anos-anosObra);
+  const valorFinal=valorAposObra*Math.pow(1+taxaValAnual,anosPos);
+  const ganhoObra=valorAposObra-viBase;
+  const ganhoPos=valorFinal-valorAposObra;
+
+  // ── ALUGUEL COM REAJUSTE 5%/ANO
+  let totalAlug=0,alugM=aluguel;
+  for(let a=0;a<anos;a++){totalAlug+=alugM*12;alugM*=1.05;}
+  const alugFinal=aluguel*Math.pow(1.05,anos);
+
+  // ── EVOLUÇÃO SALDO DEVEDOR
+  const anosMarcadores=[1,2,3,5,10,15,20,25,30].filter(a=>a*12<=meses);
+  const evolRows=anosMarcadores.map(ano=>{
+    const mes=ano*12;
+    const saldo=isPrice?saldoMesPrice(pv,taxa,meses,mes):Math.max(0,pv-pv/meses*mes);
+    let pago=0;
+    if(isPrice){pago=parcPrice*mes;}
+    else{for(let n=1;n<=mes;n++){const s=pv-pv/meses*(n-1);pago+=pv/meses+s*i;}}
+    const amortReal=pv-saldo;
+    const pctAmort=pv>0?amortReal/pv*100:0;
+    const pctJuros=pago>0?Math.max(0,(pago-amortReal)/pago*100):0;
+    return`<tr><td><b>${ano}°</b></td><td>${fR(Math.max(0,Math.round(saldo)))}</td><td>${fR(Math.round(pago))}</td><td style="color:var(--gr)">${fP(pctAmort)}</td><td style="color:var(--rd)">${fP(pctJuros)}</td></tr>`;
+  }).join('');
+
+  // ── CARDS CENÁRIOS
+  const cenCards=extras.map((ex,idx)=>{
+    const c=cens[idx];const isAtivo=ex===extraAnual;
+    const eco=c.economia>0?`<div style="font-size:9px;color:var(--gr);margin-top:2px;font-weight:600">-${fR(Math.round(c.economia))}</div>`:'';
+    return`<div class="am-prazo-item${isAtivo?' ativo':''}" onclick="amSetExtra(${ex},${pv},${taxa},${meses},${aluguel},${viBase})">
+      <div class="pv">${c.anos}a</div><div class="pl">${ex===0?'Sem amort':'+'+fR(ex)+'/ano'}</div>${eco}</div>`;
+  }).join('');
+
+  // ── SWITCHERS
+  const swP=`<button class="tab${isPrice?' active':''}" style="flex:1;font-size:10px" onclick="amSetModelo('price',${pv},${taxa},${meses},${aluguel},${viBase})">PRICE — fixa</button>`;
+  const swS=`<button class="tab${!isPrice?' active':''}" style="flex:1;font-size:10px" onclick="amSetModelo('sac',${pv},${taxa},${meses},${aluguel},${viBase})">SAC — decrescente</button>`;
+  const swMed=`<button class="tab${valorizacao==='media'?' active':''}" style="flex:1;font-size:10px" onclick="amSetValor('media',${pv},${taxa},${meses},${aluguel},${viBase})">Média +5%/a</button>`;
+  const swAlt=`<button class="tab${valorizacao==='alta'?' active':''}" style="flex:1;font-size:10px" onclick="amSetValor('alta',${pv},${taxa},${meses},${aluguel},${viBase})">Alta +8%/a</button>`;
+
+  // ── COMPARATIVO ALUGUEL
+  const compH=aluguel>0?`
+  <div class="card">
+    <div class="ct">🏠 Comprar vs alugar — ${anos} anos</div>
+    <div style="font-size:10px;color:var(--tx2);margin-bottom:8px">Valorização: <b>35% na obra + ${valorizacao==='alta'?'8':'5'}%/ano pós-obra</b> · Reajuste aluguel: <b>5%/ano</b>
+      <div style="display:flex;gap:3px;margin-top:6px;padding:3px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--r)">${swMed}${swAlt}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">
+      <div style="border-radius:var(--r);padding:10px;text-align:center;background:var(--rdl);border:.5px solid var(--rdb)">
+        <div style="font-size:13px;font-weight:800;color:var(--rd)">${fR(Math.round(totalAlug))}</div>
+        <div style="font-size:8px;color:var(--tx3);text-transform:uppercase;margin-top:3px">Gasto de aluguel</div>
+        <div style="font-size:9px;color:var(--rd);margin-top:4px">Aluguel no ${anos}° ano: ${fR(Math.round(alugFinal))}/mês</div>
+        <div style="font-size:9px;color:var(--rd);margin-top:2px;font-weight:700">Patrimônio: R$0</div>
+      </div>
+      <div style="border-radius:var(--r);padding:10px;text-align:center;background:var(--aml);border:.5px solid var(--amb)">
+        <div style="font-size:13px;font-weight:800;color:var(--am)">${fR(Math.round(cSem.total))}</div>
+        <div style="font-size:8px;color:var(--tx3);text-transform:uppercase;margin-top:3px">Comprar sem amort.</div>
+        <div style="font-size:9px;color:var(--am);margin-top:4px">Parcela ${isPrice?'fixa':'inicial'}: ${fR(Math.round(isPrice?parcPrice:p1SAC))}</div>
+        <div style="font-size:9px;color:var(--gr);margin-top:2px;font-weight:700">Imóvel: ${fR(Math.round(valorFinal))}</div>
+      </div>
+      <div style="border-radius:var(--r);padding:10px;text-align:center;background:var(--grl);border:.5px solid var(--grb)">
+        <div style="font-size:13px;font-weight:800;color:var(--gr)">${fR(Math.round(cAtual.totalPago))}</div>
+        <div style="font-size:8px;color:var(--tx3);text-transform:uppercase;margin-top:3px">${extraAnual>0?'Comprar +'+fR(extraAnual)+'/ano':'Comprar sem amort.'}</div>
+        <div style="font-size:9px;color:var(--gr);margin-top:4px">${extraAnual>0?'Termina em '+cAtual.meses+'m ('+(cAtual.meses/12).toFixed(1)+'a)':meses+'m ('+anos+'a)'}</div>
+        <div style="font-size:9px;color:var(--gr);margin-top:2px;font-weight:700">Imóvel: ${fR(Math.round(valorFinal))}</div>
+      </div>
+    </div>
+    <div style="background:var(--grl);border:.5px solid var(--grb);border-radius:var(--r);padding:10px;margin-bottom:8px;font-size:10px">
+      <b style="color:var(--gr)">📈 Valorização do imóvel</b><br/>
+      Hoje: <b>${fR(viBase)}</b> → Entrega (+35%): <b>${fR(Math.round(valorAposObra))}</b> <span style="color:var(--gr)">(+${fR(Math.round(ganhoObra))})</span><br/>
+      Após ${anosPos.toFixed(0)}a pós-obra (+${valorizacao==='alta'?'8':'5'}%/a): <b>${fR(Math.round(valorFinal))}</b> <span style="color:var(--gr)">(+${fR(Math.round(ganhoPos))})</span>
+    </div>
+    <div class="al alg" style="margin-bottom:0"><span>💡</span><span>Alugando ${anos} anos você entrega <b>${fR(Math.round(totalAlug))}</b> e fica com <b>R$0</b>. Comprando, você termina com patrimônio de <b>${fR(Math.round(valorFinal))}</b>${extraAnual>0?' pagando <b>'+fR(Math.round(cAtual.totalPago))+'</b> total':''}.
+    </span></div>
+  </div>`
+  :`<div class="al alb" style="margin-top:8px"><span>ℹ</span><span>Preencha o campo <b>Aluguel atual</b> na calculadora abaixo para ver o comparativo comprar vs alugar com valorização do imóvel.</span></div>`;
+
+  const wrap=origemDG?document.getElementById('amort-wrap'):document.getElementById('amort-calc-result');
+  if(!wrap) return;
+  wrap.innerHTML=`
+  ${origemDG?`<div class="al alb" style="margin-bottom:10px"><span>ℹ</span><span>Vinculado à simulação · Financiamento: <b>${fR(pv)}</b> · Taxa: <b>${taxa}%a.a.</b> · Prazo: <b>${anos} anos</b></span></div>`:''}
+  <div style="display:flex;gap:3px;padding:3px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rl);margin-bottom:10px">${swP}${swS}</div>
+  <div class="card">
+    <div class="ct">Resumo — ${isPrice?'PRICE (parcela fixa)':'SAC (parcela decrescente)'}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">
+      <div class="am-kpi bl"><div class="v">${fR(pv)}</div><div class="l">Financiado</div></div>
+      <div class="am-kpi rd"><div class="v">${fR(Math.round(jurosBase))}</div><div class="l">Total juros</div><div class="sub">${fP(jurosBase/pv*100)} do principal</div></div>
+      <div class="am-kpi am"><div class="v">${fR(Math.round(totalBase))}</div><div class="l">Total pago em ${anos}a</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--tx2)">
+      ${isPrice?`Parcela fixa: <b>${fR(Math.round(parcPrice))}/mês</b>`:`1ª: <b>${fR(Math.round(p1SAC))}</b> → Última: <b>${fR(Math.round(pUltSAC))}</b> · Amort. fixa: <b>${fR(Math.round(pv/meses))}/mês</b>`}
+      ${!isPrice?`<div class="al alg" style="margin-top:6px;margin-bottom:0"><span>✓</span><span>SAC economiza <b>${fR(Math.round(jurosPrice-jurosSAC))}</b> vs PRICE no total.</span></div>`:''}
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">⚡ Amortização extraordinária — quanto você economiza?</div>
+    <div style="font-size:11px;color:var(--tx2);margin-bottom:10px">Cada real extra vai direto no saldo devedor — sem juros sobre ele. Toque em um cenário ou use o slider.</div>
+    <div class="am-prazo-grid">${cenCards}</div>
+    <div style="margin:10px 0">
+      <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--tx2);margin-bottom:4px">
+        <span>Amortização extra / ano</span><span id="am-sl-val" style="color:var(--bl2)">${fR(extraAnual)}</span>
+      </div>
+      <input type="range" class="am-sl" id="am-slider" min="0" max="30000" step="500" value="${extraAnual}"
+        oninput="amSliderUpd(this.value,${pv},${taxa},${meses},${jurosBase})"/>
+    </div>
+    <div id="am-slider-result" class="al ${extraAnual>0?'alg':'alb'}" style="margin-bottom:10px">
+      ${extraAnual>0
+        ?`<span>✓</span><span>Com <b>${fR(extraAnual)}/ano</b>: prazo → <b>${cAtual.meses}m (${+(cAtual.meses/12).toFixed(1)}a)</b> · Economia: <b style="color:var(--gr)">${fR(Math.round(jurosBase-cAtual.totalJuros))}</b></span>`
+        :`<span>➡</span><span>Mova o slider ou toque em um cenário acima.</span>`}
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:10px">
+        <thead><tr style="background:var(--bll)">
+          <th style="padding:5px 8px;text-align:left;font-size:9px;color:var(--bl2);text-transform:uppercase"></th>
+          <th style="padding:5px 8px;text-align:right;font-size:9px;color:var(--bl2);text-transform:uppercase">Sem amortizar</th>
+          <th style="padding:5px 8px;text-align:right;font-size:9px;color:var(--bl2);text-transform:uppercase">${extraAnual>0?'+'+fR(extraAnual)+'/ano':'Com amortização'}</th>
+          <th style="padding:5px 8px;text-align:right;font-size:9px;color:var(--gr);text-transform:uppercase">Diferença</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="padding:4px 8px;border-bottom:.5px solid var(--bd)">Prazo</td>
+            <td style="text-align:right;padding:4px 8px;border-bottom:.5px solid var(--bd)">${meses}m (${anos}a)</td>
+            <td style="text-align:right;padding:4px 8px;border-bottom:.5px solid var(--bd);font-weight:700">${cAtual.meses}m (${+(cAtual.meses/12).toFixed(1)}a)</td>
+            <td style="text-align:right;padding:4px 8px;border-bottom:.5px solid var(--bd);color:var(--gr);font-weight:700">${extraAnual>0?'-'+(meses-cAtual.meses)+'m':'—'}</td></tr>
+          <tr style="background:var(--bg)"><td style="padding:4px 8px;border-bottom:.5px solid var(--bd)">Total juros</td>
+            <td style="text-align:right;padding:4px 8px;border-bottom:.5px solid var(--bd);color:var(--rd)">${fR(Math.round(jurosBase))}</td>
+            <td style="text-align:right;padding:4px 8px;border-bottom:.5px solid var(--bd);font-weight:700;color:var(--rd)">${fR(Math.round(cAtual.totalJuros))}</td>
+            <td style="text-align:right;padding:4px 8px;border-bottom:.5px solid var(--bd);color:var(--gr);font-weight:700">${extraAnual>0?'-'+fR(Math.round(jurosBase-cAtual.totalJuros)):'—'}</td></tr>
+          <tr><td style="padding:4px 8px">Total pago</td>
+            <td style="text-align:right;padding:4px 8px">${fR(Math.round(cSem.totalPago))}</td>
+            <td style="text-align:right;padding:4px 8px;font-weight:700">${fR(Math.round(cAtual.totalPago))}</td>
+            <td style="text-align:right;padding:4px 8px;color:var(--gr);font-weight:700">${extraAnual>0?'-'+fR(Math.round(cSem.totalPago-cAtual.totalPago)):'—'}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">Evolução do saldo devedor — sem amortização extra</div>
+    <div style="font-size:10px;color:var(--tx2);margin-bottom:8px">Nos primeiros anos quase tudo que você paga são juros. Amortizar antecipado inverte esse jogo.</div>
+    <div style="overflow-x:auto">
+      <table class="am-evolucao">
+        <thead><tr><th>Ano</th><th>Saldo devedor</th><th>Total pago</th><th>% Amortizado</th><th>% Juros da parcela</th></tr></thead>
+        <tbody>${evolRows}</tbody>
+      </table>
+    </div>
+  </div>
+  ${compH}
+  <div class="al alb" style="margin-top:8px"><span>💡</span><span><b>Script:</b> Mostre o comparativo com aluguel e o cenário com FGTS anual — o prazo cai pela metade e a economia em juros costuma superar o valor do imóvel.</span></div>`;
+}
+
+function amSetModelo(m,pv,taxa,meses,alug,vi){_amState.modelo=m;renderAmort(pv,taxa,meses,alug,vi,!!document.getElementById('amort-wrap').textContent.trim());}
+function amSetValor(v,pv,taxa,meses,alug,vi){_amState.valorizacao=v;renderAmort(pv,taxa,meses,alug,vi,!!document.getElementById('amort-wrap').textContent.trim());}
+function amSetExtra(ex,pv,taxa,meses,alug,vi){
+  _amState.extraAnual=ex;
+  const sl=document.getElementById('am-slider');if(sl) sl.value=ex;
+  renderAmort(pv,taxa,meses,alug,vi,!!document.getElementById('amort-wrap').textContent.trim());
+}
+function amSliderUpd(val,pv,taxa,meses,jurosBase){
+  const extra=parseInt(val)||0;_amState.extraAnual=extra;
+  document.getElementById('am-sl-val').textContent=fR(extra);
+  const simFn=_amState.modelo==='price'?simAmortPrice:simAmortSAC;
+  const r=simFn(pv,taxa,meses,extra);
+  const eco=jurosBase-r.totalJuros;
+  const el=document.getElementById('am-slider-result');if(!el) return;
+  if(extra===0){el.className='al alb';el.innerHTML='<span>➡</span><span>Mova o slider ou toque em um cenário acima.</span>';return;}
+  el.className='al alg';
+  el.innerHTML=`<span>✓</span><span>Com <b>${fR(extra)}/ano</b>: prazo → <b>${r.meses}m (${+(r.meses/12).toFixed(1)}a)</b> · Juros: <b>${fR(Math.round(r.totalJuros))}</b> · Economia: <b style="color:var(--gr)">${fR(Math.round(eco))}</b></span>`;
+  document.querySelectorAll('.am-prazo-item').forEach(el=>{
+    const m=el.getAttribute('onclick')?.match(/amSetExtra\((\d+)/);
+    if(m) el.classList.toggle('ativo',parseInt(m[1])===extra);
+  });
+}
+function renderAmortFromDG(){
+  if(!DG){document.getElementById('amort-wrap').innerHTML='<div class="empty">Gere uma simulação na aba Dados primeiro.</div>';return;}
+  const alug=pV(document.getElementById('am-alug')?.value||'0');
+  renderAmort(DG.finR,DG.taxa,DG.meses,alug,DG.vi,true);
+}
+function calcAmortStandalone(){
+  const pv=pV(document.getElementById('am-pv').value);
+  const taxa=parseFloat(document.getElementById('am-taxa').value)||8.47;
+  const prazo=parseInt(document.getElementById('am-prazo').value)||30;
+  const alug=pV(document.getElementById('am-alug').value);
+  if(!pv){alert('Preencha o valor financiado.');return;}
+  renderAmort(pv,taxa,prazo*12,alug,0,false);
+}
 // ════ NAVEGAÇÃO ════════════════════════════════
 function ST(id){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  ['dados','resultado','prosoluto','direta'].forEach((nm,i)=>{if(nm===id) document.querySelectorAll('.tab')[i].classList.add('active')});
+  ['dados','resultado','prosoluto','direta','amort'].forEach((nm,i)=>{if(nm===id) document.querySelectorAll('.tab')[i].classList.add('active')});
+  // Renderiza amortização quando entra na aba pela primeira vez com DG
+  if(id==='amort') renderAmortFromDG();
 }
 
 // ════ LISTENERS — UM POR CAMPO, SEM ONINPUT INLINE NA TD ═
